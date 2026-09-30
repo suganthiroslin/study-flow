@@ -1,0 +1,1615 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudyFlow</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                90deg,
+                #a78bfa,
+                #22d3ee,
+                #34d399
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .glow {
+            box-shadow:
+                0 0 25px rgba(139, 92, 246, 0.12),
+                0 0 50px rgba(34, 211, 238, 0.06);
+        }
+
+        .question-item {
+            transition: all 0.2s ease;
+        }
+
+        .question-item:hover {
+            transform: translateY(-1px);
+        }
+
+        .completed-text {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+
+<body class="bg-slate-950 text-white min-h-screen">
+
+
+<!-- =========================================================
+     LOGIN PAGE
+========================================================= -->
+
+<div id="loginPage"
+     class="min-h-screen flex items-center justify-center px-5
+            bg-slate-950">
+
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+
+            <div class="inline-flex items-center justify-center
+                        w-16 h-16 rounded-2xl
+                        bg-gradient-to-br from-violet-500
+                        to-cyan-400 mb-5">
+
+                <span class="text-3xl">📚</span>
+
+            </div>
+
+            <h1 class="text-4xl font-black gradient-text">
+                StudyFlow
+            </h1>
+
+            <p class="text-slate-400 mt-2">
+                Organize your questions. Track your progress.
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800
+                    rounded-3xl p-7 glow">
+
+            <h2 id="authTitle"
+                class="text-2xl font-bold mb-2">
+                Welcome back
+            </h2>
+
+            <p id="authSubtitle"
+               class="text-slate-400 text-sm mb-6">
+                Login to continue your study journey.
+            </p>
+
+
+            <!-- Name only for signup -->
+
+            <div id="nameContainer" class="hidden mb-4">
+
+                <label class="text-sm text-slate-300">
+                    Your name
+                </label>
+
+                <input id="nameInput"
+                       type="text"
+                       placeholder="Enter your name"
+                       class="w-full mt-2 px-4 py-3
+                              bg-slate-800 border border-slate-700
+                              rounded-xl outline-none
+                              focus:border-violet-500">
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="text-sm text-slate-300">
+                    Username
+                </label>
+
+                <input id="usernameInput"
+                       type="text"
+                       placeholder="Enter username"
+                       class="w-full mt-2 px-4 py-3
+                              bg-slate-800 border border-slate-700
+                              rounded-xl outline-none
+                              focus:border-violet-500">
+
+            </div>
+
+
+            <div class="mb-5">
+
+                <label class="text-sm text-slate-300">
+                    Password
+                </label>
+
+                <input id="passwordInput"
+                       type="password"
+                       placeholder="Enter password"
+                       class="w-full mt-2 px-4 py-3
+                              bg-slate-800 border border-slate-700
+                              rounded-xl outline-none
+                              focus:border-violet-500">
+
+            </div>
+
+
+            <button onclick="handleAuth()"
+                    id="authButton"
+                    class="w-full py-3 rounded-xl
+                           bg-gradient-to-r from-violet-600
+                           to-cyan-500
+                           font-bold
+                           hover:scale-[1.01]
+                           transition">
+
+                Login
+
+            </button>
+
+
+            <p id="authMessage"
+               class="text-center text-sm mt-4"></p>
+
+
+            <button onclick="toggleAuthMode()"
+                    id="toggleAuthButton"
+                    class="w-full mt-5 text-sm
+                           text-violet-400 hover:text-violet-300">
+
+                Don't have an account? Create one
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+
+<div id="appPage" class="hidden min-h-screen">
+
+
+    <!-- NAVBAR -->
+
+    <header class="sticky top-0 z-50
+                   bg-slate-950/90 backdrop-blur-xl
+                   border-b border-slate-800">
+
+        <div class="max-w-7xl mx-auto px-5 py-4
+                    flex items-center justify-between">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl
+                            bg-gradient-to-br from-violet-500
+                            to-cyan-400
+                            flex items-center justify-center">
+
+                    📚
+
+                </div>
+
+                <div>
+
+                    <h1 class="font-black text-xl">
+                        Study<span class="gradient-text">
+                            Flow
+                        </span>
+                    </h1>
+
+                    <p id="welcomeText"
+                       class="text-xs text-slate-500">
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button onclick="logout()"
+                    class="px-4 py-2 rounded-lg
+                           border border-slate-700
+                           text-slate-300
+                           hover:bg-slate-800">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="max-w-7xl mx-auto px-5 py-8">
+
+
+        <!-- DASHBOARD -->
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8">
+
+
+            <!-- Total Lists -->
+
+            <div class="bg-slate-900 border border-slate-800
+                        rounded-2xl p-5">
+
+                <p class="text-slate-400 text-sm">
+                    Study Lists
+                </p>
+
+                <p id="totalLists"
+                   class="text-3xl font-black mt-2">
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- Total Questions -->
+
+            <div class="bg-slate-900 border border-slate-800
+                        rounded-2xl p-5">
+
+                <p class="text-slate-400 text-sm">
+                    Total Questions
+                </p>
+
+                <p id="totalQuestions"
+                   class="text-3xl font-black mt-2">
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- Completed -->
+
+            <div class="bg-slate-900 border border-slate-800
+                        rounded-2xl p-5">
+
+                <p class="text-slate-400 text-sm">
+                    Completed
+                </p>
+
+                <p id="totalCompleted"
+                   class="text-3xl font-black mt-2 text-emerald-400">
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- Overall Progress -->
+
+            <div class="bg-gradient-to-br
+                        from-violet-900/50
+                        to-cyan-900/30
+                        border border-violet-800/40
+                        rounded-2xl p-5">
+
+                <p class="text-slate-300 text-sm">
+                    Overall Progress
+                </p>
+
+                <p id="overallProgress"
+                   class="text-3xl font-black mt-2">
+                    0%
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CONTENT -->
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+
+            <!-- =========================================
+                 SIDEBAR - LISTS
+            ========================================== -->
+
+            <aside class="lg:col-span-1">
+
+                <div class="bg-slate-900 border border-slate-800
+                            rounded-2xl p-4">
+
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <h2 class="font-bold">
+                            My Lists
+                        </h2>
+
+                        <button onclick="createList()"
+                                class="w-9 h-9 rounded-lg
+                                       bg-violet-600
+                                       hover:bg-violet-500
+                                       font-bold">
+
+                            +
+
+                        </button>
+
+                    </div>
+
+
+                    <div id="listContainer"
+                         class="space-y-2">
+                    </div>
+
+
+                    <p id="noListsMessage"
+                       class="text-center text-slate-500
+                              text-sm py-8">
+
+                        Create your first study list.
+
+                    </p>
+
+                </div>
+
+            </aside>
+
+
+
+            <!-- =========================================
+                 MAIN QUESTION AREA
+            ========================================== -->
+
+            <section class="lg:col-span-3">
+
+
+                <!-- No selected list -->
+
+                <div id="noListSelected"
+                     class="bg-slate-900 border border-slate-800
+                            rounded-2xl p-12 text-center">
+
+                    <div class="text-5xl mb-5">
+                        📖
+                    </div>
+
+                    <h2 class="text-2xl font-bold">
+                        Start your study session
+                    </h2>
+
+                    <p class="text-slate-400 mt-2">
+                        Create a list and add your questions.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Selected List -->
+
+                <div id="listContent"
+                     class="hidden">
+
+
+                    <!-- LIST HEADER -->
+
+                    <div class="bg-slate-900 border border-slate-800
+                                rounded-2xl p-6 mb-5">
+
+
+                        <div class="flex flex-col sm:flex-row
+                                    sm:items-center
+                                    justify-between gap-4">
+
+
+                            <div>
+
+                                <div class="flex items-center gap-3">
+
+                                    <h2 id="currentListName"
+                                        class="text-2xl font-black">
+
+                                    </h2>
+
+                                    <button onclick="renameCurrentList()"
+                                            class="text-slate-500
+                                                   hover:text-white">
+
+                                        ✏️
+
+                                    </button>
+
+                                </div>
+
+                                <p id="currentListStats"
+                                   class="text-sm text-slate-400 mt-1">
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="text-right">
+
+                                <p id="currentPercentage"
+                                   class="text-3xl font-black
+                                          gradient-text">
+
+                                    0%
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Progress -->
+
+                        <div class="mt-5">
+
+                            <div class="h-2 bg-slate-800
+                                        rounded-full overflow-hidden">
+
+                                <div id="currentProgressBar"
+                                     class="h-full
+                                            bg-gradient-to-r
+                                            from-violet-500
+                                            to-cyan-400
+                                            transition-all duration-500"
+                                     style="width: 0%">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ADD QUESTIONS -->
+
+                    <div class="bg-slate-900 border border-slate-800
+                                rounded-2xl p-5 mb-5">
+
+                        <h3 class="font-bold mb-3">
+                            Add Questions
+                        </h3>
+
+                        <textarea id="questionInput"
+                                  rows="6"
+                                  placeholder="Paste your questions here...
+
+1. What is encapsulation?
+2. What is inheritance?
+3. Explain polymorphism
+4. What is abstraction?"
+                                  class="w-full px-4 py-3
+                                         bg-slate-800
+                                         border border-slate-700
+                                         rounded-xl
+                                         outline-none
+                                         resize-y
+                                         focus:border-violet-500"></textarea>
+
+
+                        <button onclick="addQuestions()"
+                                class="mt-3 px-5 py-3
+                                       rounded-xl
+                                       bg-gradient-to-r
+                                       from-violet-600
+                                       to-cyan-500
+                                       font-bold">
+
+                            + Add Questions
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- QUESTION CONTROLS -->
+
+                    <div class="flex flex-col sm:flex-row
+                                gap-3 mb-4">
+
+
+                        <div class="relative flex-1">
+
+                            <span class="absolute left-4 top-3.5">
+                                🔍
+                            </span>
+
+                            <input id="searchInput"
+                                   oninput="displayQuestions()"
+                                   placeholder="Search questions..."
+                                   class="w-full pl-11 pr-4 py-3
+                                          bg-slate-900
+                                          border border-slate-800
+                                          rounded-xl
+                                          outline-none
+                                          focus:border-violet-500">
+
+                        </div>
+
+
+                        <button onclick="deleteCompleted()"
+                                class="px-5 py-3 rounded-xl
+                                       border border-slate-700
+                                       hover:bg-slate-800">
+
+                            🧹 Completed
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- QUESTION LIST -->
+
+                    <div id="questionContainer"
+                         class="space-y-3">
+
+                    </div>
+
+
+                    <div id="emptyQuestions"
+                         class="hidden text-center
+                                py-12 text-slate-500">
+
+                        <div class="text-4xl mb-3">
+                            🎯
+                        </div>
+
+                        No questions yet.
+
+                    </div>
+
+
+                    <!-- DELETE LIST -->
+
+                    <button onclick="deleteCurrentList()"
+                            class="mt-8 text-sm text-red-400
+                                   hover:text-red-300">
+
+                        🗑 Delete this list
+
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   APPLICATION DATA
+========================================================= */
+
+let isSignup = false;
+
+let currentUser = localStorage.getItem("study_current_user");
+
+let users =
+    JSON.parse(localStorage.getItem("study_users")) || {};
+
+
+
+/* =========================================================
+   AUTH MODE
+========================================================= */
+
+function toggleAuthMode() {
+
+    isSignup = !isSignup;
+
+    document.getElementById("nameContainer")
+        .classList.toggle("hidden", !isSignup);
+
+    if (isSignup) {
+
+        document.getElementById("authTitle")
+            .textContent = "Create your account";
+
+        document.getElementById("authSubtitle")
+            .textContent =
+            "Create your personal study space.";
+
+        document.getElementById("authButton")
+            .textContent = "Create Account";
+
+        document.getElementById("toggleAuthButton")
+            .textContent =
+            "Already have an account? Login";
+
+    } else {
+
+        document.getElementById("authTitle")
+            .textContent = "Welcome back";
+
+        document.getElementById("authSubtitle")
+            .textContent =
+            "Login to continue your study journey.";
+
+        document.getElementById("authButton")
+            .textContent = "Login";
+
+        document.getElementById("toggleAuthButton")
+            .textContent =
+            "Don't have an account? Create one";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LOGIN / SIGNUP
+========================================================= */
+
+function handleAuth() {
+
+    const username =
+        document.getElementById("usernameInput")
+            .value.trim();
+
+    const password =
+        document.getElementById("passwordInput")
+            .value.trim();
+
+    const message =
+        document.getElementById("authMessage");
+
+
+    if (username === "" || password === "") {
+
+        message.textContent =
+            "Please fill all required fields.";
+
+        message.className =
+            "text-center text-sm mt-4 text-red-400";
+
+        return;
+    }
+
+
+    if (isSignup) {
+
+        const name =
+            document.getElementById("nameInput")
+                .value.trim();
+
+
+        if (name === "") {
+
+            message.textContent =
+                "Please enter your name.";
+
+            message.className =
+                "text-center text-sm mt-4 text-red-400";
+
+            return;
+        }
+
+
+        if (users[username]) {
+
+            message.textContent =
+                "Username already exists.";
+
+            message.className =
+                "text-center text-sm mt-4 text-red-400";
+
+            return;
+        }
+
+
+        users[username] = {
+
+            name: name,
+
+            password: password,
+
+            lists: []
+
+        };
+
+
+        saveUsers();
+
+
+        message.textContent =
+            "Account created! You can now login.";
+
+        message.className =
+            "text-center text-sm mt-4 text-emerald-400";
+
+
+        toggleAuthMode();
+
+
+    } else {
+
+
+        if (!users[username]) {
+
+            message.textContent =
+                "User not found.";
+
+            message.className =
+                "text-center text-sm mt-4 text-red-400";
+
+            return;
+        }
+
+
+        if (users[username].password !== password) {
+
+            message.textContent =
+                "Incorrect password.";
+
+            message.className =
+                "text-center text-sm mt-4 text-red-400";
+
+            return;
+        }
+
+
+        currentUser = username;
+
+        localStorage.setItem(
+            "study_current_user",
+            username
+        );
+
+
+        showApp();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SAVE USERS
+========================================================= */
+
+function saveUsers() {
+
+    localStorage.setItem(
+        "study_users",
+        JSON.stringify(users)
+    );
+
+}
+
+
+
+/* =========================================================
+   SHOW APPLICATION
+========================================================= */
+
+function showApp() {
+
+    document.getElementById("loginPage")
+        .classList.add("hidden");
+
+    document.getElementById("appPage")
+        .classList.remove("hidden");
+
+
+    const user =
+        users[currentUser];
+
+
+    document.getElementById("welcomeText")
+        .textContent =
+        "Welcome, " + user.name;
+
+
+    displayLists();
+
+    updateDashboard();
+
+}
+
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    localStorage.removeItem("study_current_user");
+
+    currentUser = null;
+
+    document.getElementById("appPage")
+        .classList.add("hidden");
+
+    document.getElementById("loginPage")
+        .classList.remove("hidden");
+
+}
+
+
+
+/* =========================================================
+   CREATE LIST
+========================================================= */
+
+function createList() {
+
+    const name =
+        prompt("Enter the name of your study list:");
+
+    if (!name || name.trim() === "") {
+        return;
+    }
+
+
+    users[currentUser].lists.push({
+
+        id: Date.now(),
+
+        name: name.trim(),
+
+        questions: []
+
+    });
+
+
+    saveUsers();
+
+    displayLists();
+
+    updateDashboard();
+
+
+    const lists =
+        users[currentUser].lists;
+
+    selectList(
+        lists[lists.length - 1].id
+    );
+
+}
+
+
+
+/* =========================================================
+   DISPLAY LISTS
+========================================================= */
+
+function displayLists() {
+
+    const container =
+        document.getElementById("listContainer");
+
+    const empty =
+        document.getElementById("noListsMessage");
+
+
+    container.innerHTML = "";
+
+
+    const lists =
+        users[currentUser].lists;
+
+
+    if (lists.length === 0) {
+
+        empty.classList.remove("hidden");
+
+        return;
+
+    }
+
+
+    empty.classList.add("hidden");
+
+
+    lists.forEach(function(list) {
+
+        const completed =
+            list.questions.filter(q => q.completed).length;
+
+        const total =
+            list.questions.length;
+
+
+        const button =
+            document.createElement("button");
+
+
+        button.className =
+            "w-full text-left p-3 rounded-xl " +
+            "hover:bg-slate-800 transition";
+
+
+        button.innerHTML = `
+
+            <div class="flex justify-between items-center">
+
+                <div class="flex items-center gap-3">
+
+                    <span>📖</span>
+
+                    <div>
+
+                        <p class="font-medium">
+                            ${escapeHTML(list.name)}
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+                            ${completed}/${total} completed
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="text-xs text-slate-500">
+                    ${total > 0
+                        ? Math.round(completed / total * 100)
+                        : 0}%
+                </span>
+
+            </div>
+        `;
+
+
+        button.onclick = function() {
+
+            selectList(list.id);
+
+        };
+
+
+        container.appendChild(button);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   SELECT LIST
+========================================================= */
+
+let currentListId = null;
+
+
+function selectList(id) {
+
+    currentListId = id;
+
+
+    document.getElementById("noListSelected")
+        .classList.add("hidden");
+
+    document.getElementById("listContent")
+        .classList.remove("hidden");
+
+
+    displayLists();
+
+    displayQuestions();
+
+    updateListInfo();
+
+}
+
+
+
+/* =========================================================
+   GET CURRENT LIST
+========================================================= */
+
+function getCurrentList() {
+
+    return users[currentUser].lists.find(
+        list => list.id === currentListId
+    );
+
+}
+
+
+
+/* =========================================================
+   RENAME LIST
+========================================================= */
+
+function renameCurrentList() {
+
+    const list =
+        getCurrentList();
+
+    if (!list) return;
+
+
+    const newName =
+        prompt(
+            "Enter new list name:",
+            list.name
+        );
+
+
+    if (!newName || newName.trim() === "") {
+        return;
+    }
+
+
+    list.name =
+        newName.trim();
+
+
+    saveUsers();
+
+    displayLists();
+
+    updateListInfo();
+
+}
+
+
+
+/* =========================================================
+   ADD QUESTIONS
+========================================================= */
+
+function addQuestions() {
+
+    const list =
+        getCurrentList();
+
+
+    if (!list) {
+        return;
+    }
+
+
+    const textarea =
+        document.getElementById("questionInput");
+
+
+    const input =
+        textarea.value.trim();
+
+
+    if (input === "") {
+
+        alert("Please paste some questions.");
+
+        return;
+
+    }
+
+
+    const lines =
+        input.split("\n");
+
+
+    lines.forEach(function(line) {
+
+        line = line.trim();
+
+
+        if (line === "") {
+            return;
+        }
+
+
+        /*
+            Remove:
+
+            1.
+            2)
+            10.
+            -
+            *
+            •
+        */
+
+        line =
+            line.replace(
+                /^(\d+[\.\)]|\-|\*|•)\s*/,
+                ""
+            );
+
+
+        if (line !== "") {
+
+            list.questions.push({
+
+                id: Date.now() +
+                    Math.random(),
+
+                text: line,
+
+                completed: false
+
+            });
+
+        }
+
+    });
+
+
+    textarea.value = "";
+
+
+    saveUsers();
+
+    displayQuestions();
+
+    updateListInfo();
+
+    displayLists();
+
+    updateDashboard();
+
+}
+
+
+
+/* =========================================================
+   DISPLAY QUESTIONS
+========================================================= */
+
+function displayQuestions() {
+
+    const list =
+        getCurrentList();
+
+
+    if (!list) return;
+
+
+    const container =
+        document.getElementById("questionContainer");
+
+
+    const empty =
+        document.getElementById("emptyQuestions");
+
+
+    const search =
+        document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+
+    container.innerHTML = "";
+
+
+    const filtered =
+        list.questions.filter(function(question) {
+
+            return question.text
+                .toLowerCase()
+                .includes(search);
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        empty.classList.remove("hidden");
+
+        updateListInfo();
+
+        return;
+
+    }
+
+
+    empty.classList.add("hidden");
+
+
+    filtered.forEach(function(question) {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "question-item bg-slate-900 " +
+            "border border-slate-800 " +
+            "rounded-2xl p-4 flex items-start gap-4";
+
+
+        const checkbox =
+            document.createElement("input");
+
+
+        checkbox.type = "checkbox";
+
+        checkbox.checked =
+            question.completed;
+
+
+        checkbox.className =
+            "mt-1 w-5 h-5 accent-violet-500 cursor-pointer";
+
+
+        checkbox.onchange = function() {
+
+            question.completed =
+                checkbox.checked;
+
+            saveUsers();
+
+            displayQuestions();
+
+            updateListInfo();
+
+            displayLists();
+
+            updateDashboard();
+
+        };
+
+
+        const text =
+            document.createElement("p");
+
+
+        text.className =
+            "flex-1 leading-7 text-slate-200";
+
+
+        if (question.completed) {
+
+            text.classList.add(
+                "completed-text"
+            );
+
+        }
+
+
+        text.textContent =
+            question.text;
+
+
+        const deleteButton =
+            document.createElement("button");
+
+
+        deleteButton.textContent =
+            "🗑️";
+
+
+        deleteButton.className =
+            "text-slate-500 hover:text-red-400";
+
+
+        deleteButton.onclick = function() {
+
+            list.questions =
+                list.questions.filter(
+                    q => q.id !== question.id
+                );
+
+
+            saveUsers();
+
+            displayQuestions();
+
+            updateListInfo();
+
+            displayLists();
+
+            updateDashboard();
+
+        };
+
+
+        div.appendChild(checkbox);
+
+        div.appendChild(text);
+
+        div.appendChild(deleteButton);
+
+
+        container.appendChild(div);
+
+    });
+
+
+    updateListInfo();
+
+}
+
+
+
+/* =========================================================
+   UPDATE CURRENT LIST INFO
+========================================================= */
+
+function updateListInfo() {
+
+    const list =
+        getCurrentList();
+
+
+    if (!list) return;
+
+
+    const total =
+        list.questions.length;
+
+
+    const completed =
+        list.questions.filter(
+            q => q.completed
+        ).length;
+
+
+    const percentage =
+        total === 0
+            ? 0
+            : Math.round(
+                completed / total * 100
+            );
+
+
+    document.getElementById("currentListName")
+        .textContent =
+        list.name;
+
+
+    document.getElementById("currentListStats")
+        .textContent =
+        `${completed} completed • ${total} questions`;
+
+
+    document.getElementById("currentPercentage")
+        .textContent =
+        percentage + "%";
+
+
+    document.getElementById("currentProgressBar")
+        .style.width =
+        percentage + "%";
+
+}
+
+
+
+/* =========================================================
+   DELETE COMPLETED
+========================================================= */
+
+function deleteCompleted() {
+
+    const list =
+        getCurrentList();
+
+
+    if (!list) return;
+
+
+    list.questions =
+        list.questions.filter(
+            q => !q.completed
+        );
+
+
+    saveUsers();
+
+    displayQuestions();
+
+    updateListInfo();
+
+    displayLists();
+
+    updateDashboard();
+
+}
+
+
+
+/* =========================================================
+   DELETE CURRENT LIST
+========================================================= */
+
+function deleteCurrentList() {
+
+    const list =
+        getCurrentList();
+
+
+    if (!list) return;
+
+
+    const confirmDelete =
+        confirm(
+            `Delete "${list.name}"?`
+        );
+
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    users[currentUser].lists =
+        users[currentUser].lists.filter(
+            list => list.id !== currentListId
+        );
+
+
+    currentListId = null;
+
+
+    saveUsers();
+
+    displayLists();
+
+    updateDashboard();
+
+
+    document.getElementById("listContent")
+        .classList.add("hidden");
+
+    document.getElementById("noListSelected")
+        .classList.remove("hidden");
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    const lists =
+        users[currentUser].lists;
+
+
+    let totalQuestions = 0;
+
+    let totalCompleted = 0;
+
+
+    lists.forEach(function(list) {
+
+        totalQuestions +=
+            list.questions.length;
+
+
+        totalCompleted +=
+            list.questions.filter(
+                q => q.completed
+            ).length;
+
+    });
+
+
+    const progress =
+        totalQuestions === 0
+            ? 0
+            : Math.round(
+                totalCompleted /
+                totalQuestions *
+                100
+            );
+
+
+    document.getElementById("totalLists")
+        .textContent =
+        lists.length;
+
+
+    document.getElementById("totalQuestions")
+        .textContent =
+        totalQuestions;
+
+
+    document.getElementById("totalCompleted")
+        .textContent =
+        totalCompleted;
+
+
+    document.getElementById("overallProgress")
+        .textContent =
+        progress + "%";
+
+}
+
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================================
+   START APPLICATION IF ALREADY LOGGED IN
+========================================================= */
+
+if (currentUser && users[currentUser]) {
+
+    showApp();
+
+}
+
+</script>
+
+</body>
+</html>
+
